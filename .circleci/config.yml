@@ -237,7 +237,9 @@ jobs:
           name: Run migrations
           command: |
             cd backend
-            npm cache clean --force
+            rm -rf node_modules
+            rm package-lock.json yarn.lock
+            npm cache clear --force
             npm install
             npm audit fix --audit-level=critical --force
             npm audit fix --audit-level=critical --force
