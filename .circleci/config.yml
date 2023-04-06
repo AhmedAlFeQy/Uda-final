@@ -233,18 +233,18 @@ jobs:
       - restore_cache:
           keys: [backend-build]
       - install_awscli
-      - install_nodejs
       - run:
           name: Run migrations
           command: |
             cd backend
-            sudo apt install nodejs -y
-            sudo apt install npm -y
+            # sudo apt install nodejs -y
+            # sudo apt install npm -y
             # sudo npm install -g npm
             # sudo npm audit
             # sudo npm update
-            npm audit fix --audit-level=critical --force
-            npm audit fix --audit-level=critical --force
+            # npm audit fix --audit-level=critical --force
+            # npm audit fix --audit-level=critical --force
+            npm install
             npm run build
             npm run migrations > migrations_dump.txt
             cat migrations_dump.txt
