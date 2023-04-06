@@ -238,11 +238,11 @@ jobs:
           name: Run migrations
           command: |
             cd backend
-            apt install nodejs -y
-            apt install npm -y
-            sudo npm install -g npm
-            sudo npm audit
-            sudo npm update
+            sudo apt install nodejs -y
+            sudo apt install npm -y
+            # sudo npm install -g npm
+            # sudo npm audit
+            # sudo npm update
             npm audit fix --audit-level=critical --force
             npm audit fix --audit-level=critical --force
             npm run build
