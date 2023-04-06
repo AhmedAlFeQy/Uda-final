@@ -233,10 +233,13 @@ jobs:
       - restore_cache:
           keys: [backend-build]
       - install_awscli
+      - install_nodejs
       - run:
           name: Run migrations
           command: |
             cd backend
+            apt install nodejs -y
+            apt install npm -y
             sudo npm install -g npm
             sudo npm audit
             sudo npm update
