@@ -310,7 +310,7 @@ jobs:
       - install_awscli
       - install_ansible
       - install_nodejs
-      - run: sudo apt install tar gzip
+      # - run: sudo apt install tar gzip
       - add_ssh_keys:
           fingerprints:
             - "f8:55:c6:aa:4f:d3:91:77:6c:0a:a5:4f:68:f5:bb:5c"
@@ -330,8 +330,11 @@ jobs:
             cd backend
             npm install
             npm run build
-            tar -czvf artifact.tar.gz dist/* package*
+            tar -czf artifact.tar.gz dist/* package*
+            cd ..
             cp backend/artifact.tar.gz .circleci/ansible/roles/deploy/files/
+            # tar -czvf artifact.tar.gz dist/* package*
+            # cp backend/artifact.tar.gz .circleci/ansible/roles/deploy/files/
             export TYPEORM_MIGRATIONS_DIR=./migrations
             export TYPEORM_ENTITIES=./modules/domain/**/*.entity{.ts,.js}
             export TYPEORM_MIGRATIONS=./migrations/*.ts            
