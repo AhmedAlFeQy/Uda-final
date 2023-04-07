@@ -332,7 +332,7 @@ jobs:
             npm run build
             tar -czf artifact.tar.gz dist/* package*
             cd ..
-            cp backend/artifact.tar.gz .circleci/ansible/roles/deploy/files/
+            sudo cp backend/artifact.tar.gz .circleci/ansible/roles/deploy/files/artifact.tar.gz
             # tar -czvf artifact.tar.gz dist/* package*
             # cp backend/artifact.tar.gz .circleci/ansible/roles/deploy/files/
             export TYPEORM_MIGRATIONS_DIR=./migrations
