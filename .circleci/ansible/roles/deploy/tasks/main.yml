@@ -7,7 +7,7 @@
 - name: "unzipping"
   unarchive:
     src: artifact.tar.gz
-    dest: ~/backendapp
+    dest: ~/backend
 
 - name: "Installing Node Dependencies"
   shell: |
