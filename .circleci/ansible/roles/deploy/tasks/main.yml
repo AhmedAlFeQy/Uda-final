@@ -1,47 +1,47 @@
-# - name: "Create a directory"
-#   file:
-#     path: ~/backend
-#     state: directory
-#     mode: '0755'
-
-# - name: "unzipping"
-#   unarchive:
-#     src: artifact.tar.gz
-#     dest: ~/backend
-
-# - name: "Installing Node Dependencies"
-#   shell: |
-#     cd ~/backend
-#     npm install
-# - name: "pm2"
-#   shell: |
-#     cd ~/backend/dist
-#     pm2 stop default
-#     pm2 start main.js
-#   register: execute_node
----
-- name: "Creates backend app directory"
+- name: "Create a directory"
   file:
-    path: ~/backend-app
+    path: ~/backendapp
     state: directory
+    mode: '0755'
 
-- name: "Unarchive backend files" 
+- name: "unzipping"
   unarchive:
     src: artifact.tar.gz
-    dest: ~/backend-app
+    dest: ~/backendapp
 
 - name: "Installing Node Dependencies"
   shell: |
-    cd ~/backend-app/
-    ls -al
+    cd ~/backendapp
     npm install
-- name: "Executing Node app with PM2"
+- name: "pm2"
   shell: |
-    cd ~/backend-app/dist
+    cd ~/backendapp/dist
     pm2 stop default
     pm2 start main.js
- 
   register: execute_node
+# ---
+# - name: "Creates backend app directory"
+#   file:
+#     path: ~/backend-app
+#     state: directory
+
+# - name: "Unarchive backend files" 
+#   unarchive:
+#     src: artifact.tar.gz
+#     dest: ~/backend-app
+
+# - name: "Installing Node Dependencies"
+#   shell: |
+#     cd ~/backend-app/
+#     ls -al
+#     npm install
+# - name: "Executing Node app with PM2"
+#   shell: |
+#     cd ~/backend-app/dist
+#     pm2 stop default
+#     pm2 start main.js
+ 
+#   register: execute_node
 
 - name: print message
   debug:
