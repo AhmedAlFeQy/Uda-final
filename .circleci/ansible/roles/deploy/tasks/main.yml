@@ -1,21 +1,21 @@
 - name: "Create a directory"
   file:
-    path: ~/backendapp
+    path: /home/ubuntu/backend
     state: directory
     mode: '0755'
 
 - name: "unzipping"
   unarchive:
     src: artifact.tar.gz
-    dest: ~/backendapp
+    dest: /home/ubuntu/backend
 
 - name: "Installing Node Dependencies"
   shell: |
-    cd ~/backendapp
+    cd /home/ubuntu/backend
     npm install
 - name: "pm2"
   shell: |
-    cd ~/backendapp/dist
+    cd /home/ubuntu/backend/dist
     pm2 stop default
     pm2 start main.js
   register: execute_node
