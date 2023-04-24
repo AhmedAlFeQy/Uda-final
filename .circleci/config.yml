@@ -316,12 +316,6 @@ jobs:
           fingerprints:
             - "f8:55:c6:aa:4f:d3:91:77:6c:0a:a5:4f:68:f5:bb:5c"
 
-      - run:
-          name: install requirement
-          command: |
-            # pip install ansible
-            # pip install awscli
-            apt update && apt install nodejs npm tar gzip -y
       - attach_workspace:
           at: ~/
       - run:
