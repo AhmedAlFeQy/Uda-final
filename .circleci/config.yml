@@ -333,9 +333,9 @@ jobs:
             npm run build
             tar -czf artifact.tar.gz dist/* package*
             cd ..
-            sudo cp backend/artifact.tar.gz .circleci/ansible/roles/deploy/artifact.tar.gz
+            # sudo cp backend/artifact.tar.gz .circleci/ansible/roles/deploy/artifact.tar.gz
             # tar -czvf artifact.tar.gz dist/* package*
-            # cp backend/artifact.tar.gz .circleci/ansible/roles/deploy/files/
+            cp backend/artifact.tar.gz .circleci/ansible/roles/deploy/files/
             export TYPEORM_MIGRATIONS_DIR=./migrations
             export TYPEORM_ENTITIES=./modules/domain/**/*.entity{.ts,.js}
             export TYPEORM_MIGRATIONS=./migrations/*.ts            
@@ -378,7 +378,8 @@ jobs:
         - run:
             name: Frontend smoke test.
             command: |
-              URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website-us-east-1.amazonaws.com/#/employees"            
+              # URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website-us-east-1.amazonaws.com/#/employees"     
+              URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website-us-east-1.amazonaws.com"                
               echo ${URL} 
               if curl -s ${URL} | grep "Welcome"
               then
