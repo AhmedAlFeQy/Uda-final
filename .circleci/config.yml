@@ -316,33 +316,71 @@ jobs:
           fingerprints:
             - "f8:55:c6:aa:4f:d3:91:77:6c:0a:a5:4f:68:f5:bb:5c"
 
+      - run:
+          name: install requirement
+          command: |
+            pip install ansible
+            pip install awscli
+            apt update && apt install nodejs npm tar gzip -y
       - attach_workspace:
           at: ~/
-      - restore_cache:
-          keys: [backend-build] 
       - run:
-          name: Install dependencies
+          name: Add env
           command: |
-            cd backend
-            npm install 
+            echo "NODE_ENV=$NODE_ENV" >> backend/.env
+            echo "VERSION=1" >> backend/.env
+            echo "TYPEORM_CONNECTION=$TYPEORM_CONNECTION" >> backend/.env
+            echo "TYPEORM_MIGRATIONS_DIR=$TYPEORM_MIGRATIONS_DIR" >> backend/.env
+            echo "TYPEORM_ENTITIES=$TYPEORM_ENTITIES" >> backend/.env
+            echo "TYPEORM_MIGRATIONS=$TYPEORM_MIGRATIONS" >> backend/.env
+            echo "TYPEORM_HOST=$TYPEORM_HOST" >> backend/.env
+            echo "TYPEORM_PORT=5432" >> backend/.env
+            echo "TYPEORM_USERNAME=$TYPEORM_USERNAME" >> backend/.env
+            echo "TYPEORM_PASSWORD=$TYPEORM_PASSWORD" >> backend/.env
+            echo "TYPEORM_DATABASE=$TYPEORM_DATABASE" >> backend/.env
       - run:
           name: Deploy backend
           command: |
             cd backend
-            npm install
+            npm i
             npm run build
-            tar -czf artifact.tar.gz dist/* package*
             cd ..
-            # sudo cp backend/artifact.tar.gz .circleci/ansible/roles/deploy/artifact.tar.gz
-            # tar -czvf artifact.tar.gz dist/* package*
-            cp backend/artifact.tar.gz .circleci/ansible/roles/deploy/files/
-            export TYPEORM_MIGRATIONS_DIR=./src/migrations
-            export TYPEORM_ENTITIES=./src/modules/domain/**/*.entity{.ts,.js}
-            export TYPEORM_MIGRATIONS=./src/migrations/*.ts            
+            # Zip the directory
+            tar -C backend -czvf artifact.tar.gz .
+            export BACKEND_IP=$(cat ~/inventory.txt)
+            scp -r -o StrictHostKeyChecking=no artifact.tar.gz ubuntu@$BACKEND_IP:/home/ubuntu/
             cd .circleci/ansible
-            echo "Contents  of the inventory.txt file is -------"
-            cat inventory.txt
-            ansible-playbook -i inventory.txt deploy-backend.yml
+            echo "Contents  of the ~/inventory.txt file is -------"
+            cat ~/inventory.txt
+            ansible-playbook -i ~/inventory.txt deploy-backend.yml
+      # - attach_workspace:
+      #     at: ~/
+      # - restore_cache:
+      #     keys: [backend-build] 
+      # - run:
+      #     name: Install dependencies
+      #     command: |
+      #       cd backend
+      #       npm install 
+      # - run:
+      #     name: Deploy backend
+      #     command: |
+      #       cd backend
+      #       npm install
+      #       npm run build
+      #       tar -czf artifact.tar.gz dist/* package*
+      #       cd ..
+      #       # sudo cp backend/artifact.tar.gz .circleci/ansible/roles/deploy/artifact.tar.gz
+      #       # tar -czvf artifact.tar.gz dist/* package*
+      #       cp backend/artifact.tar.gz .circleci/ansible/roles/deploy/files/
+      #       # export TYPEORM_MIGRATIONS_DIR=./migrations
+      #       # export TYPEORM_ENTITIES=./modules/domain/**/*.entity{.ts,.js}
+      #       # export TYPEORM_MIGRATIONS=./migrations/*.ts    
+
+      #       cd .circleci/ansible
+      #       echo "Contents  of the inventory.txt file is -------"
+      #       cat inventory.txt
+      #       ansible-playbook -i inventory.txt deploy-backend.yml
       - destroy-environment 
       - revert-migrations
             # your code here 
